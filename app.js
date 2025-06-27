@@ -66,7 +66,30 @@ class App{
                 self.boardData = obj;
             });
 	}
-	
+	// 3. Play background music (non-positional, global sound)
+const bgSound = new THREE.Audio(listener);
+const audioLoader = new THREE.AudioLoader();
+
+audioLoader.load('./assets/ambient.mp3', (buffer) => {
+    console.log("Background audio loaded");
+    bgSound.setBuffer(buffer);
+    bgSound.setLoop(true);
+    bgSound.setVolume(3); // You can adjust volume
+    this.scene.add(bgSound);
+
+    // Required: user interaction to start audio (browser policy)
+    const startAudio = () => {
+        if (!bgSound.isPlaying) {
+            bgSound.play();
+            console.log("Background music started");
+        }
+        window.removeEventListener('click', startAudio);
+    };
+
+    window.addEventListener('click', startAudio);
+}, undefined, (err) => {
+    console.error("Failed to load background audio", err);
+});
     setEnvironment(){
         const loader = new RGBELoader().setDataType( THREE.UnsignedByteType );
         const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
