@@ -31,7 +31,7 @@ class App {
 		audioLoader.load('./assets/ambient.mp3', (buffer) => {
 			this.bgSound.setBuffer(buffer);
 			this.bgSound.setLoop(true);
-			this.bgSound.setVolume(0.5);
+			this.bgSound.setVolume(5);
 			this.scene.add(this.bgSound);
 
 			const startAudio = () => {
