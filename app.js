@@ -65,7 +65,7 @@ class App{
                 self.boardShown = '';
                 self.boardData = obj;
             });
-	}
+	
 	// 3. Play background music (non-positional, global sound)
 const bgSound = new THREE.Audio(listener);
 const audioLoader = new THREE.AudioLoader();
