@@ -11,24 +11,47 @@ import { GazeController } from './libs/GazeController.js';
 import { XRControllerModelFactory } from './libs/three/jsm/XRControllerModelFactory.js';
 
 
-class App{
-	constructor(){
-		const container = document.createElement( 'div' );
-		document.body.appendChild( container );
+class App {
+	constructor() {
+		const container = document.createElement('div');
+		document.body.appendChild(container);
 
 		this.assetsPath = './assets/';
-        
-		this.camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 500 );
-		this.camera.position.set( 0, 1.6, 0 );
-        
-        this.dolly = new THREE.Object3D(  );
-        this.dolly.position.set(0, 0, 10);
-        this.dolly.add( this.camera );
-        this.dummyCam = new THREE.Object3D();
-        this.camera.add( this.dummyCam );
-        
+
+		this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 500);
+		this.camera.position.set(0, 1.6, 0);
+
+		// 🎵 BACKGROUND MUSIC SETUP
+		this.listener = new THREE.AudioListener();
+		this.camera.add(this.listener);
+
+		this.bgSound = new THREE.Audio(this.listener);
+		const audioLoader = new THREE.AudioLoader();
+
+		audioLoader.load('./assets/ambient.mp3', (buffer) => {
+			this.bgSound.setBuffer(buffer);
+			this.bgSound.setLoop(true);
+			this.bgSound.setVolume(0.5);
+			this.scene.add(this.bgSound);
+
+			const startAudio = () => {
+				if (!this.bgSound.isPlaying) this.bgSound.play();
+				window.removeEventListener('click', startAudio);
+			};
+			window.addEventListener('click', startAudio);
+		}, undefined, (err) => {
+			console.error("Error loading background audio:", err);
+		});
+		// 🎵 END BACKGROUND MUSIC
+
+		this.dolly = new THREE.Object3D();
+		this.dolly.position.set(0, 0, 10);
+		this.dolly.add(this.camera);
+		this.dummyCam = new THREE.Object3D();
+		this.camera.add(this.dummyCam);
+
 		this.scene = new THREE.Scene();
-        this.scene.add( this.dolly );
+		this.scene.add(this.dolly);
         
 		const ambient = new THREE.HemisphereLight(0xFFFFFF, 0xAAAAAA, 0.8);
 		this.scene.add(ambient);
