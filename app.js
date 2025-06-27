@@ -87,7 +87,7 @@ audioLoader.load('./assets/ambient.mp3', (buffer) => {
     console.log("Background audio loaded");
     bgSound.setBuffer(buffer);
     bgSound.setLoop(true);
-    bgSound.setVolume(10); // You can adjust volume
+    bgSound.setVolume(6); // You can adjust volume
     this.scene.add(bgSound);
 
     // Required: user interaction to start audio (browser policy)
